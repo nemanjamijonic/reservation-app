@@ -1,0 +1,94 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# NuGet Packages
+*.nupkg
+**/packages/*
+!**/packages/build/
+!**/packages/repositories.config
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Entity Framework Core
+*.mdf
+*.ldf
+*.sqlite
+*.db
+*.bak
+Migrations/
+
+# Microsoft Azure
+.azure/
+local.settings.json
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Rider
+.idea/
+*.iml
+
+# Visual Studio Code
+.vscode/
+
+# Logs
+*.log
+logs/
+
+# npm Packages
+node_modules/
+
+# Generated files
+Generated/
+Generated_Code/
+Generated Files/
+
+# Environment variables
+.env
+.env.*
+
+# User Secrets
+secrets.json
+
+# JetBrains Rider
+.idea/
+*.dotSettings.user
+
+# Coverage Reports
+*.lcov
+coverage/
+
+# Temporary Files
+~$*
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Publish results
+publish/
+wwwroot/
