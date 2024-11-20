@@ -6,7 +6,7 @@ namespace ReservationAPI.Models.Domain
     public class User
     {
         private string _passwordHash = string.Empty;
-        public int UserId { get; set; }
+        public Guid Id { get; set; }
         public string? Username { get; set; }
         public string PasswordHash
         {
