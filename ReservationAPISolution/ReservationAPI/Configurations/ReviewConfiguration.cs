@@ -24,13 +24,7 @@ namespace ReservationAPI.Configurations
             builder.Property(r => r.IsDeleted)
                 .IsRequired();
 
-            builder.Property(r => r.User)
-                .IsRequired();
-
             builder.Property(r => r.UserId)
-                .IsRequired();
-
-            builder.Property(r => r.Restaurant)
                 .IsRequired();
 
             builder.Property(r => r.RestaurantId)

@@ -16,13 +16,7 @@ namespace ReservationAPI.Configurations
             builder.Property(r => r.UserId)
                 .IsRequired();
 
-            builder.Property(r => r.User)
-                .IsRequired();
-
             builder.Property(r => r.TableId)
-                .IsRequired();
-
-            builder.Property(r => r.Table)
                 .IsRequired();
 
             builder.Property(r => r.IsCanceled)

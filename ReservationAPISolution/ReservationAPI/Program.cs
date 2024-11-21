@@ -1,4 +1,7 @@
 
+using Microsoft.EntityFrameworkCore;
+using ReservationAPI.Data;
+
 namespace ReservationAPI
 {
     public class Program
@@ -9,7 +12,13 @@ namespace ReservationAPI
 
             // Add services to the container.
 
+            builder.Services.AddDbContext<ReservationsDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+
             builder.Services.AddControllers();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

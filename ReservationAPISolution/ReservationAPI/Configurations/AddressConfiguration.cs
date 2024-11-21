@@ -28,8 +28,6 @@ namespace ReservationAPI.Configurations
             builder.Property(a => a.RestaurantId)
                 .IsRequired();
 
-            builder.Property(a => a.Restaurant)
-                .IsRequired();
         }
     }
 }

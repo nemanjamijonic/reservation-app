@@ -17,9 +17,6 @@ namespace ReservationAPI.Configurations
                 .HasMaxLength(100)
                 .IsRequired();
 
-            builder.Property(r => r.Address)
-                .IsRequired();
-
             builder.Property(r => r.PhoneNumber)
                 .HasMaxLength(25)
                 .IsRequired();

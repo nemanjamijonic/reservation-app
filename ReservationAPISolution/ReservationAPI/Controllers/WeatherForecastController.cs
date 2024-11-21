@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using ReservationAPI.Data;
 
 namespace ReservationAPI.Controllers
 {
@@ -6,6 +7,7 @@ namespace ReservationAPI.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
+        private ReservationsDbContext ReservationsDbContext;
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"

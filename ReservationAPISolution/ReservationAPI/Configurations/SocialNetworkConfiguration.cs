@@ -24,9 +24,6 @@ namespace ReservationAPI.Configurations
             builder.Property(sn => sn.RestaurantId)
                 .IsRequired();
 
-            builder.Property(sn => sn.Restaurant)
-                .IsRequired();
-
             builder.HasOne(sn => sn.Restaurant)
                    .WithMany(r => r.SocialNetworks)
                    .HasForeignKey(sn => sn.RestaurantId);

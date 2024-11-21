@@ -16,9 +16,6 @@ namespace ReservationAPI.Configurations
             builder.Property(t => t.RestaurantId)
                .IsRequired();
 
-            builder.Property(t => t.Restaurant)
-               .IsRequired();
-
             builder.Property(t => t.Capacity)
                 .IsRequired();
 
