@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ReservationAPI.Data;
+using ReservationAPI.Helpers;
+using ReservationAPI.Interfaces;
+using ReservationAPI.Repositories;
 
 namespace ReservationAPI
 {
@@ -39,6 +42,10 @@ namespace ReservationAPI
             builder.Services.AddDbContext<ReservationsDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
+
+            builder.Services.AddScoped<TokenHelper>();
+
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
@@ -65,6 +72,8 @@ namespace ReservationAPI
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("AllowSpecificOrigin");
 
             app.UseAuthentication();
             app.UseAuthorization();

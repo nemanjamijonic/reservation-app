@@ -1,4 +1,6 @@
-﻿using ReservationAPI.Helpers;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using ReservationAPI.Helpers;
 using ReservationAPI.Models.Enums;
 
 namespace ReservationAPI.Models.Domain

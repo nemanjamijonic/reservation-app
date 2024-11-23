@@ -26,8 +26,8 @@ namespace ReservationAPI.Helpers
                 new Claim("userid", user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
-            
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration?["Jwt:Key"] ?? throw new ArgumentNullException("Jwt:Key")));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
            
