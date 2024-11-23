@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import { loginAPI } from "../../services/auth-service/LoginService";
+import { loginAPI } from "../../services/auth-services/LoginService";
 import { AuthResponseModel } from "../../models/AuthResponseModel";
 import "./Login.css";
 
