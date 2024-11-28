@@ -1,5 +1,6 @@
 
 using System.Text;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -43,7 +44,9 @@ namespace ReservationAPI
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
-
+            builder.Services.AddScoped<ISocialNetworkRepository, SocialNetworkRepository>();
+            builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
+            
             builder.Services.AddScoped<TokenHelper>();
 
             builder.Services.AddCors(options =>
@@ -56,7 +59,12 @@ namespace ReservationAPI
                         .AllowCredentials());
             });
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                options.JsonSerializerOptions.WriteIndented = true;
+            });
+
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

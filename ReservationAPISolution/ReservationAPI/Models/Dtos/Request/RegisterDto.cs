@@ -1,6 +1,6 @@
 ﻿using ReservationAPI.Models.Enums;
 
-namespace ReservationAPI.Models.Dtos
+namespace ReservationAPI.Models.Dtos.Request
 {
     public class RegisterDto
     {

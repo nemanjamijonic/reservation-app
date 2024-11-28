@@ -3,7 +3,8 @@ using ReservationAPI.Data;
 using ReservationAPI.Helpers;
 using ReservationAPI.Interfaces;
 using ReservationAPI.Models.Domain;
-using ReservationAPI.Models.Dtos;
+using ReservationAPI.Models.Dtos.Request;
+using ReservationAPI.Models.Dtos.Response;
 
 namespace ReservationAPI.Repositories
 {

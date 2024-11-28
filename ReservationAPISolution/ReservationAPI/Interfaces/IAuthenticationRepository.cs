@@ -1,4 +1,5 @@
-﻿using ReservationAPI.Models.Dtos;
+﻿using ReservationAPI.Models.Dtos.Request;
+using ReservationAPI.Models.Dtos.Response;
 
 namespace ReservationAPI.Interfaces
 {

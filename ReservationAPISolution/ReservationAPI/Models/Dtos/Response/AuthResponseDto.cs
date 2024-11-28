@@ -1,4 +1,4 @@
-﻿namespace ReservationAPI.Models.Dtos
+﻿namespace ReservationAPI.Models.Dtos.Response
 {
     public class AuthResponseDto
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ReservationAPI.Interfaces;
-using ReservationAPI.Models.Dtos;
+using ReservationAPI.Models.Dtos.Request;
 
 namespace ReservationAPI.Controllers
 {
