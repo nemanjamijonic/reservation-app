@@ -3,6 +3,7 @@ using ReservationAPI.Data;
 using ReservationAPI.Interfaces;
 using ReservationAPI.Models.Domain;
 using ReservationAPI.Models.Dtos.Request;
+using Serilog;
 
 namespace ReservationAPI.Repositories
 {
@@ -33,10 +34,14 @@ namespace ReservationAPI.Repositories
 
         public async Task<List<Restaurant>> GetRestaurantsAsync()
         {
+            Log.Information($"Called GetRestaurantsAsync for execution at {DateTime.UtcNow}");
             return await _context.Restaurants
-                .Include(r => r.SocialNetworks) 
+                .Include(r => r.SocialNetworks)  
+                .Include(r => r.Tables)          
+                .Include(r => r.Reviews)       
                 .Where(r => !r.IsDeleted)
                 .ToListAsync();
         }
+
     }
 }

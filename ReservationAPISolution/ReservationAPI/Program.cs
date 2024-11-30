@@ -1,4 +1,4 @@
-
+﻿
 using System.Text;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -8,6 +8,8 @@ using ReservationAPI.Data;
 using ReservationAPI.Helpers;
 using ReservationAPI.Interfaces;
 using ReservationAPI.Repositories;
+using Serilog;
+using Serilog.Formatting.Json;
 
 namespace ReservationAPI
 {
@@ -46,6 +48,7 @@ namespace ReservationAPI
             builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
             builder.Services.AddScoped<ISocialNetworkRepository, SocialNetworkRepository>();
             builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
+            builder.Services.AddScoped<ITableRepository, TableRepository>();
             
             builder.Services.AddScoped<TokenHelper>();
 
@@ -70,6 +73,20 @@ namespace ReservationAPI
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.File(
+                    formatter: new JsonFormatter(renderMessage: true),
+                    path: "logs/reservationApp-.json",
+                    rollingInterval: RollingInterval.Day,
+                    shared: true
+                )
+                .CreateLogger();
+
+
+
+            builder.Host.UseSerilog();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -78,6 +95,8 @@ namespace ReservationAPI
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
 

@@ -5,6 +5,7 @@ using ReservationAPI.Interfaces;
 using ReservationAPI.Models.Domain;
 using ReservationAPI.Models.Dtos.Request;
 using ReservationAPI.Models.Dtos.Response;
+using Serilog;
 
 namespace ReservationAPI.Repositories
 {
@@ -21,6 +22,7 @@ namespace ReservationAPI.Repositories
 
         public async Task<AuthResponseDto?> LoginAsync(LoginDto loginDto)
         {
+            Log.Information("Started Login Method");
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Username == loginDto.Username && !u.IsDeleted);
 
