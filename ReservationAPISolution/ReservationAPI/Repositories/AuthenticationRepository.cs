@@ -22,15 +22,25 @@ namespace ReservationAPI.Repositories
 
         public async Task<AuthResponseDto?> LoginAsync(LoginDto loginDto)
         {
-            Log.Information("Started Login Method");
+            Log.Information("Login attempt for user: {Username}", loginDto.Username);
+
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Username == loginDto.Username && !u.IsDeleted);
 
-            if (user == null || !HashHelper.VerifyPassword(loginDto.Password, user.PasswordHash))
+            if (user == null)
             {
+                Log.Warning("Login failed for user: {Username}. User not found or deleted.", loginDto.Username);
                 return null;
             }
+
+            if (!HashHelper.VerifyPassword(loginDto.Password, user.PasswordHash))
+            {
+                Log.Warning("Login failed for user: {Username}. Incorrect password.", loginDto.Username);
+                return null;
+            }
+
             var token = _tokenHelper.GenerateToken(user);
+            Log.Information("Login successful for user: {Username}. Token generated.", loginDto.Username);
 
             return new AuthResponseDto
             {
@@ -40,13 +50,17 @@ namespace ReservationAPI.Repositories
             };
         }
 
+
         public async Task<AuthResponseDto> RegisterAsync(RegisterDto registerDto)
         {
+            Log.Information("Registration attempt for username: {Username} and email: {Email}", registerDto.Username, registerDto.Email);
+
             var usernameExists = await _context.Users.AnyAsync(u => u.Username == registerDto.Username && !u.IsDeleted);
             var emailExists = await _context.Users.AnyAsync(u => u.Email == registerDto.Email && !u.IsDeleted);
 
             if (usernameExists || emailExists)
             {
+                Log.Warning("Registration failed for username: {Username} or email: {Email}. Already exists.", registerDto.Username, registerDto.Email);
                 throw new InvalidOperationException("Username or email already exists.");
             }
 
@@ -64,10 +78,14 @@ namespace ReservationAPI.Repositories
                 CreatedAt = DateTime.UtcNow,
             };
 
+            Log.Information("Creating new user: {Username}", newUser.Username);
+
             await _context.Users.AddAsync(newUser);
             await _context.SaveChangesAsync();
 
             var token = _tokenHelper.GenerateToken(newUser);
+
+            Log.Information("Registration successful for user: {Username}. Token generated.", newUser.Username);
 
             return new AuthResponseDto
             {
@@ -76,5 +94,6 @@ namespace ReservationAPI.Repositories
                 Username = newUser.Username
             };
         }
+
     }
 }

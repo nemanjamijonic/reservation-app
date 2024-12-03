@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using Serilog;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace ReservationAPI.Helpers
@@ -6,8 +7,11 @@ namespace ReservationAPI.Helpers
     public static class HashHelper
     {
         private static readonly string _salt = "ymbjxenohhmvohuadbkz";
+
         public static string HashPassword(string password)
         {
+            Log.Information("Starting password hashing.");
+
             using (SHA256 sha256 = SHA256.Create())
             {
                 byte[] saltBytes = Encoding.UTF8.GetBytes(_salt);
@@ -22,14 +26,29 @@ namespace ReservationAPI.Helpers
                 {
                     builder.Append(b.ToString("x2"));
                 }
+
+                Log.Information("Password hashing completed.");
                 return builder.ToString();
             }
         }
 
         public static bool VerifyPassword(string password, string hashedPassword)
         {
+            Log.Information("Verifying password.");
+
             string computedHash = HashPassword(password);
-            return computedHash == hashedPassword;
+            bool isMatch = computedHash == hashedPassword;
+
+            if (isMatch)
+            {
+                Log.Information("Password verification successful.");
+            }
+            else
+            {
+                Log.Warning("Password verification failed.");
+            }
+
+            return isMatch;
         }
     }
 }

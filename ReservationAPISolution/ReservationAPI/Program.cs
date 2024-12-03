@@ -72,15 +72,8 @@ namespace ReservationAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
             Log.Logger = new LoggerConfiguration()
-                .WriteTo.Console()
-                .WriteTo.File(
-                    formatter: new JsonFormatter(renderMessage: true),
-                    path: "logs/reservationApp-.json",
-                    rollingInterval: RollingInterval.Day,
-                    shared: true
-                )
+                .ReadFrom.Configuration(builder.Configuration) 
                 .CreateLogger();
 
 
@@ -96,13 +89,15 @@ namespace ReservationAPI
                 app.UseSwaggerUI();
             }
 
-            app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
+
+            app.UseSerilogRequestLogging();
 
             app.UseCors("AllowSpecificOrigin");
 
             app.UseAuthentication();
+
             app.UseAuthorization();
 
 

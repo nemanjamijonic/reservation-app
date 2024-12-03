@@ -34,7 +34,6 @@ namespace ReservationAPI.Repositories
 
         public async Task<List<Restaurant>> GetRestaurantsAsync()
         {
-            Log.Information($"Called GetRestaurantsAsync for execution at {DateTime.UtcNow}");
             return await _context.Restaurants
                 .Include(r => r.SocialNetworks)  
                 .Include(r => r.Tables)          
