@@ -1,5 +1,4 @@
-﻿
-using System.Text;
+﻿using System.Text;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +8,8 @@ using ReservationAPI.Helpers;
 using ReservationAPI.Interfaces;
 using ReservationAPI.Repositories;
 using Serilog;
-using Serilog.Formatting.Json;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 namespace ReservationAPI
 {
@@ -21,14 +21,14 @@ namespace ReservationAPI
 
             // Add services to the container.
 
-            builder.Services.AddAuthentication(x => 
+            builder.Services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(x => 
+            }).AddJwtBearer(x =>
             {
-                x.TokenValidationParameters = new TokenValidationParameters 
+                x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidIssuer = builder.Configuration["Jwt:Issuer"],
                     ValidAudience = builder.Configuration["Jwt:Audience"],
@@ -49,7 +49,7 @@ namespace ReservationAPI
             builder.Services.AddScoped<ISocialNetworkRepository, SocialNetworkRepository>();
             builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
             builder.Services.AddScoped<ITableRepository, TableRepository>();
-            
+
             builder.Services.AddScoped<TokenHelper>();
 
             builder.Services.AddCors(options =>
@@ -62,21 +62,26 @@ namespace ReservationAPI
                         .AllowCredentials());
             });
 
-            builder.Services.AddControllers().AddJsonOptions(options =>
-            {
-                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-                options.JsonSerializerOptions.WriteIndented = true;
-            });
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                    options.JsonSerializerOptions.WriteIndented = true;
+                });
 
+            // FluentValidation konfiguracija
+            builder.Services.AddFluentValidationAutoValidation()
+                            .AddFluentValidationClientsideAdapters();
+
+            builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
             Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(builder.Configuration) 
+                .ReadFrom.Configuration(builder.Configuration)
                 .CreateLogger();
-
-
 
             builder.Host.UseSerilog();
 
@@ -89,7 +94,6 @@ namespace ReservationAPI
                 app.UseSwaggerUI();
             }
 
-
             app.UseHttpsRedirection();
 
             app.UseSerilogRequestLogging();
@@ -99,7 +103,6 @@ namespace ReservationAPI
             app.UseAuthentication();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 

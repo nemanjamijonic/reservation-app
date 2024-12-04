@@ -26,7 +26,7 @@ namespace ReservationAPI.Repositories
                 CreatedAt = DateTime.UtcNow
             };
 
-            _context.Set<Restaurant>().Add(restaurant);
+            await _context.Restaurants.AddAsync(restaurant);
             await _context.SaveChangesAsync();
 
             return restaurant;
