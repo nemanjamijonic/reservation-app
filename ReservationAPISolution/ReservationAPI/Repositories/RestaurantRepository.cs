@@ -16,31 +16,49 @@ namespace ReservationAPI.Repositories
             _context = context;
         }
 
+        public async Task<List<Restaurant>> GetRestaurantsAsync()
+        {
+            Log.Information("Fetching all restaurants...");
+
+            var restaurants = await _context.Restaurants
+                .Include(r => r.SocialNetworks)
+                .Include(r => r.Tables)
+                .Include(r => r.Reviews)
+                .Where(r => !r.IsDeleted)
+                .ToListAsync();
+
+            Log.Information("Fetched {Count} restaurants.", restaurants.Count);
+
+            return restaurants;
+        }
+
         public async Task<Restaurant> CreateRestaurantAsync(CreateRestaurantDto request)
         {
+            Log.Information("Attempting to create a new restaurant: {Name}", request.Name);
+
             var restaurant = new Restaurant
             {
                 Name = request.Name,
                 PhoneNumber = request.PhoneNumber,
+                IsDeleted = false,
                 OpenDate = request.OpenDate,
                 CreatedAt = DateTime.UtcNow
             };
 
-            await _context.Restaurants.AddAsync(restaurant);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.Restaurants.AddAsync(restaurant);
+                await _context.SaveChangesAsync();
+
+                Log.Information("Successfully created restaurant: {Name} with ID {Id}", restaurant.Name, restaurant.Id);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to create restaurant: {Name}", request.Name);
+                throw;
+            }
 
             return restaurant;
         }
-
-        public async Task<List<Restaurant>> GetRestaurantsAsync()
-        {
-            return await _context.Restaurants
-                .Include(r => r.SocialNetworks)  
-                .Include(r => r.Tables)          
-                .Include(r => r.Reviews)       
-                .Where(r => !r.IsDeleted)
-                .ToListAsync();
-        }
-
     }
 }
